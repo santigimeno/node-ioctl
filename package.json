@@ -1,0 +1,19 @@
+{
+    "name": "ioctl",
+    "version": "0.0.0",
+    "description": "nodejs ioctl wrapper",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "ioctl",
+        "syscall"
+    ],
+    "author": "Santiago Gimeno",
+    "license": "ISC",
+    "dependencies": {
+        "bindings": "^1.1.1",
+        "nan": "^0.8.0"
+    }
+}
