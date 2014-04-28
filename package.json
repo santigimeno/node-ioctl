@@ -10,8 +10,18 @@
         "ioctl",
         "syscall"
     ],
-    "author": "Santiago Gimeno",
-    "license": "ISC",
+    "author": {
+        "name": "Santiago Gimeno",
+        "email": "santiago.gimeno@gmail.com"
+    },
+    "license": {
+        "type": "ISC",
+        "url": "https://github.com/santigimeno/node-ioctl/blob/master/LICENSE"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/santigimeno/node-ioctl.git"
+    },
     "dependencies": {
         "bindings": "^1.1.1",
         "nan": "^0.8.0"
