@@ -1,3 +1,4 @@
+#include <errno.h>
 #include <sys/ioctl.h>
 #include <v8.h>
 #include <node.h>
@@ -34,6 +35,9 @@ NAN_METHOD(Ioctl) {
     int fd = args[0]->Int32Value();
     int request = args[1]->Uint32Value();
     int res = ioctl(fd, request, argp);
+    if (res == -1) {
+        res = -errno;
+    }
 
     NanReturnValue(Number::New(res));
 }
@@ -43,3 +47,4 @@ void InitAll(Handle<Object> exports) {
 }
 
 NODE_MODULE(ioctl, InitAll)
+
