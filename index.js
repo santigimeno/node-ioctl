@@ -1,4 +1,4 @@
-var ioctl = require('./build/Release/ioctl.node').ioctl;
+var ioctl = require('bindings')('ioctl.node').ioctl;
 
 module.exports = function(d, request, argp) {
     var ret = ioctl(d, request, argp);
