@@ -32,7 +32,7 @@ NAN_METHOD(Ioctl) {
     }
 
     int fd = args[0]->Int32Value();
-    int request = args[1]->Uint32Value();
+    unsigned long request = args[1]->IntegerValue();
     int res = ioctl(fd, request, argp);
     if (res == -1) {
         res = -errno;
