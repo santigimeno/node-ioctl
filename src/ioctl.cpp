@@ -23,12 +23,16 @@ NAN_METHOD(Ioctl) {
     }
 
     if (length == 3) {
-        buf = args[2]->ToObject();
-        if (!Buffer::HasInstance(buf)) {
-            NanThrowTypeError("Argument 2 Must be a Buffer");
-        }
+        if (args[2]->IsInt32()) {
+            argp = reinterpret_cast<void*>(args[2]->Int32Value());
+        } else {
+            buf = args[2]->ToObject();
+            if (!Buffer::HasInstance(buf)) {
+                NanThrowTypeError("Argument 2 Must be an Integer or a Buffer");
+            }
 
-        argp = Buffer::Data(buf);
+            argp = Buffer::Data(buf);
+        }
     }
 
     int fd = args[0]->Int32Value();
