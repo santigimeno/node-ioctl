@@ -10,7 +10,7 @@ NAN_METHOD(Ioctl) {
     Local<Object> buf;
     int length = args.Length();
 
-    assert((length == 2) || (length == 3));
+    assert(length == 3);
 
     void* argp = NULL;
 
@@ -22,7 +22,7 @@ NAN_METHOD(Ioctl) {
 		NanThrowTypeError("Argument 1 Must be an Integer");
     }
 
-    if (length == 3) {
+    if (!args[2]->IsUndefined()) {
         if (args[2]->IsInt32()) {
             argp = reinterpret_cast<void*>(args[2]->Int32Value());
         } else {
