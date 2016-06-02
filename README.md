@@ -12,6 +12,20 @@ Install with `npm`:
 $ npm install ioctl
 ```
 
+API
+--------
+
+### ioctl(fileDescriptor, request, data)
+**Parameters**
+- **fileDescriptor**: `Integer` Target file descriptor, must be open.
+- **request**: `Integer` Device specific request code.
+- **data**: `Integer|Buffer` Request data.
+
+**Returns**: `Integer` Usually zero is returned, some calls use the return value as a output parameter
+and may return a positive integer.
+
+**Throws**: Throws on failed `ioctl` call.
+
 Examples
 --------
 

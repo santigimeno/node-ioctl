@@ -38,9 +38,10 @@ NAN_METHOD(Ioctl) {
 
     int fd = info[0]->Int32Value();
     unsigned long request = info[1]->IntegerValue();
+
     int res = ioctl(fd, request, argp);
-    if (res == -1) {
-        res = -errno;
+    if (res < 0) {
+        return Nan::ThrowError(Nan::ErrnoException(errno, "ioctl", nullptr, nullptr));
     }
 
     info.GetReturnValue().Set(res);
