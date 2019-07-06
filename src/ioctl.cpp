@@ -15,7 +15,7 @@ NAN_METHOD(Ioctl) {
 
     void* argp = NULL;
 
-    if (!info[0]->IsInt32()) {
+    if (!info[0]->IsUint32()) {
         Nan::ThrowTypeError("Argument 0 Must be an Integer");
     }
 
@@ -25,9 +25,9 @@ NAN_METHOD(Ioctl) {
 
     if ((length == 3) && !info[2]->IsUndefined()) {
         if (info[2]->IsInt32()) {
-            argp = reinterpret_cast<void*>(info[2]->Int32Value());
-        } else {
-            buf = info[2]->ToObject();
+            argp = reinterpret_cast<void*>(Nan::To<int32_t>(info[2]).ToChecked());
+        } else if (info[2]->IsObject()) {
+            buf = Nan::To<Object>(info[2]).ToLocalChecked();
             if (!Buffer::HasInstance(buf)) {
                 Nan::ThrowTypeError("Argument 2 Must be an Integer or a Buffer");
             }
@@ -36,8 +36,8 @@ NAN_METHOD(Ioctl) {
         }
     }
 
-    int fd = info[0]->Int32Value();
-    unsigned long request = info[1]->IntegerValue();
+    int fd = Nan::To<int32_t>(info[0]).ToChecked();
+    unsigned long request = Nan::To<uint32_t>(info[1]).ToChecked();
 
     int res = ioctl(fd, request, argp);
     if (res < 0) {
@@ -48,8 +48,9 @@ NAN_METHOD(Ioctl) {
 }
 
 void InitAll(Local<Object> exports) {
-    exports->Set(Nan::New("ioctl").ToLocalChecked(),
-                 Nan::New<FunctionTemplate>(Ioctl)->GetFunction());
+    Nan::Set(exports,
+             Nan::New("ioctl").ToLocalChecked(),
+             Nan::GetFunction(Nan::New<FunctionTemplate>(Ioctl)).ToLocalChecked());
 }
 
 NODE_MODULE(ioctl, InitAll)

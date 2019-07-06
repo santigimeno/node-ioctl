@@ -23,7 +23,7 @@
         "url": "git://github.com/santigimeno/node-ioctl.git"
     },
     "dependencies": {
-        "bindings": "^1.1.1",
-        "nan": "^2.3.2"
+        "bindings": "^1.5.0",
+        "nan": "^2.14.0"
     }
 }
