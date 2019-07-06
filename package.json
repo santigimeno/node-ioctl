@@ -1,6 +1,6 @@
 {
     "name": "ioctl",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "description": "nodejs ioctl wrapper",
     "main": "index.js",
     "scripts": {
