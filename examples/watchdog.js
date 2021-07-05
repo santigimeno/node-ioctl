@@ -1,35 +1,30 @@
-var fs = require('fs');
-var ioctl = require('../');
-var ref = require('ref');
-var ArrayType = require('ref-array');
-var StructType = require('ref-struct');
+'use strict';
 
-var WATCHDOG_DEVICE = '/dev/watchdog';
-var WDIOC_GETSUPPORT = 2150127360;
+const fs = require('fs');
+const ioctl = require('../');
+const sharedStructs = require('shared-structs');
 
-// struct watchdog_info {
-//     __u32 options;      /* Options the card/driver supports */
-//     __u32 firmware_version; /* Firmware version of the card */
-//     __u8  identity[32]; /* Identity of the board */
-// };
+const WATCHDOG_DEVICE = '/dev/watchdog';
+const WDIOC_GETSUPPORT = 2150127360;
 
-// define the "snd_hwdep_info" struct type
-var watchdog_info = StructType({
-    options : ref.types.uint32,
-    firmware_version : ref.types.uint32,
-    identity : ArrayType(ref.types.uchar, 32)
-});
+const structs = sharedStructs(`
+  struct watchdog_info {
+    uint32_t options;      /* Options the card/driver supports */
+    uint32_t firmware_version; /* Firmware version of the card */
+    uint8_t  identity[32]; /* Identity of the board */
+  };
+`);
 
-var info = new watchdog_info();
+const info = structs.watchdog_info();
 
 fs.open(WATCHDOG_DEVICE, 'r', function(err, fd) {
     if (err) {
         throw err;
     }
 
-    var ret = ioctl(fd, WDIOC_GETSUPPORT, info.ref());
+    const ret = ioctl(fd, WDIOC_GETSUPPORT, info.rawBuffer);
     console.log('options: ' + info.options);
     console.log('firmware_version: ' + info.firmware_version);
-    console.log('identity: ' + info.identity.buffer.toString());
+    console.log('identity: ' + info.identity.toString());
     fs.close(fd);
 });
