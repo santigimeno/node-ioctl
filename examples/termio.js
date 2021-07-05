@@ -1,40 +1,31 @@
-var fs = require('fs');
-var ioctl = require('../');
-var ref = require('ref');
-var ArrayType = require('ref-array');
-var StructType = require('ref-struct');
+'use strict';
 
-var TTY = '/dev/tty1';
-var TCGETA = 0x5405;
-var TIOCEXCL = 0x540C;
+const fs = require('fs');
+const ioctl = require('../');
+const sharedStructs = require('shared-structs');
 
-// #define NCC 8
-// struct termio {
-//     unsigned short c_iflag;     /* input mode flags */
-//     unsigned short c_oflag;     /* output mode flags */
-//     unsigned short c_cflag;     /* control mode flags */
-//     unsigned short c_lflag;     /* local mode flags */
-//     unsigned char c_line;       /* line discipline */
-//     unsigned char c_cc[NCC];    /* control characters */
-// };
+const TTY = '/dev/tty1';
+const TCGETA = 0x5405;
+const TIOCEXCL = 0x540C;
 
-// define the "snd_hwdep_info" struct type
-var termio = StructType({
-    c_iflag : ref.types.ushort,
-    c_oflag : ref.types.ushort,
-    c_cflag : ref.types.ushort,
-    c_lflag : ref.types.ushort,
-    c_line : ref.types.uchar,
-    c_cc : ArrayType(ref.types.uchar, 8)
-});
+const structs = sharedStructs(`
+  struct termio {
+    uint16_t c_iflag;     /* input mode flags */
+    uint16_t c_oflag;     /* output mode flags */
+    uint16_t c_cflag;     /* control mode flags */
+    uint16_t c_lflag;     /* local mode flags */
+    uint8_t c_line;       /* line discipline */
+    uint8_t c_cc[8];    /* control characters */
+  };
+`);
 
 fs.open(TTY, 'r+', function(err, fd) {
     if (err) {
         throw err;
     }
 
-    var info = new termio();
-    var ret = ioctl(fd, TCGETA, info.ref());
+    var info = structs.termio();
+    var ret = ioctl(fd, TCGETA, info.rawBuffer);
     console.log('TCGETA ret: ' + ret);
     console.log('c_iflag: ' + info.c_iflag);
     console.log('c_oflag: ' + info.c_oflag);

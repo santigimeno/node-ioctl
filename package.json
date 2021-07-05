@@ -24,6 +24,7 @@
     },
     "dependencies": {
         "bindings": "^1.5.0",
-        "nan": "^2.14.0"
+        "node-addon-api": "^4.0.0",
+        "shared-structs": "^1.4.1"
     }
 }
